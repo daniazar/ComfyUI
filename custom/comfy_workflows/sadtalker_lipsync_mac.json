@@ -1,0 +1,165 @@
+{
+  "last_node_id": 5,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [-760, -100],
+      "size": { "0": 315, "1": 314 },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [1],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": { "Node name for S&R": "LoadImage" },
+      "widgets_values": ["ruby.png", "image"]
+    },
+    {
+      "id": 2,
+      "type": "ImageScale",
+      "pos": [-380, -100],
+      "size": { "0": 315, "1": 130 },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 1,
+          "slot_index": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [2],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": { "Node name for S&R": "ImageScale" },
+      "widgets_values": [512, 512, "lanczos", "center"]
+    },
+    {
+      "id": 3,
+      "type": "LoadAudio",
+      "pos": [-760, 260],
+      "size": { "0": 315, "1": 130 },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [3],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": { "Node name for S&R": "LoadAudio" },
+      "widgets_values": ["input_audio.wav"]
+    },
+    {
+      "id": 4,
+      "type": "SadTalker",
+      "pos": [-10, 60],
+      "size": { "0": 380, "1": 370 },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2,
+          "slot_index": 0
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 3,
+          "slot_index": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_path",
+          "type": "STRING",
+          "links": null,
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "show_video_path",
+          "type": "STRING",
+          "links": [4],
+          "shape": 3,
+          "slot_index": 1
+        }
+      ],
+      "properties": { "Node name for S&R": "SadTalker" },
+      "widgets_values": [
+        0,
+        "256",
+        "crop",
+        true,
+        2,
+        false,
+        false,
+        5,
+        false,
+        "pose"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "ShowVideo",
+      "pos": [420, 60],
+      "size": { "0": 420, "1": 480 },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_path",
+          "type": "STRING",
+          "link": 4,
+          "slot_index": 0
+        }
+      ],
+      "properties": { "Node name for S&R": "ShowVideo" }
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "IMAGE"],
+    [2, 2, 0, 4, 0, "IMAGE"],
+    [3, 3, 0, 4, 1, "AUDIO"],
+    [4, 4, 1, 5, 0, "STRING"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.85,
+      "offset": { "0": 900, "1": 300 }
+    }
+  },
+  "version": 0.4
+}

@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "title": "EchoMimic V3 Flash-Pro — NewsStudio (512×768, 25fps)",
+    "description": "Audio-driven upper-body avatar animation using EchoMimic V3 Flash-Pro (8 steps). Optimized for Mac M4 with block offload. Node: smthemex/ComfyUI_EchoMimic.",
+    "setup": "bash scripts/setup-echomimic-v3.sh",
+    "mac_note": "Start ComfyUI with: PYTORCH_ENABLE_MPS_FALLBACK=1 python main.py",
+    "node_classes": "Echo_LoadModel → Echo_Predata → Echo_Sampler → CreateVideo → SaveVideo"
+  },
+  "1": {
+    "inputs": {
+      "vae": "Wan2_1_VAE_bf16.safetensors",
+      "lora": "None",
+      "denoising": "none",
+      "infer_mode": "audio_drived",
+      "lowvram": false,
+      "teacache_offload": false,
+      "block_offload": true,
+      "use_mmgp": "HighRAM_LowVRAM",
+      "version": "V3_flash"
+    },
+    "class_type": "Echo_LoadModel",
+    "_meta": { "title": "Load EchoMimic V3 Flash Model" }
+  },
+  "2": {
+    "inputs": {
+      "image": "avatar.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": { "title": "Load Avatar Image (replace with persona image)" }
+  },
+  "3": {
+    "inputs": {
+      "audio": "voice.wav",
+      "upload": "audio"
+    },
+    "class_type": "LoadAudio",
+    "_meta": { "title": "Load TTS Audio (replace with segment WAV)" }
+  },
+  "4": {
+    "inputs": {
+      "model_name": "clip_vision_h.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": { "title": "Load CLIP-H Vision Encoder" }
+  },
+  "5": {
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": { "title": "Load UMT5-XXL Text Encoder" }
+  },
+  "6": {
+    "inputs": {
+      "info": ["1", 1],
+      "image": ["2", 0],
+      "audio": ["3", 0],
+      "clip": ["5", 0],
+      "clip_vision": ["4", 0],
+      "prompt": "a professional news anchor talking, realistic, upper body visible, natural lighting, looking at camera, clear face",
+      "negative_prompt": "Gesture is bad. Gesture is unclear. Strange and twisted hands. Bad hands. Bad fingers. Unclear and blurry hands. 手部快速摆动, 手指频繁抽搐, 夸张手势, 重复机械性动作.",
+      "pose_dir": "pose_01",
+      "width": 512,
+      "height": 768,
+      "fps": 25,
+      "facemask_ratio": 0.1,
+      "facecrop_ratio": 0.8,
+      "length": 251,
+      "partial_video_length": 97,
+      "draw_mouse": false,
+      "motion_sync_": false
+    },
+    "class_type": "Echo_Predata",
+    "_meta": { "title": "EchoMimic V3 Preprocess (Image + Audio → Embeds)" }
+  },
+  "7": {
+    "inputs": {
+      "model": ["1", 0],
+      "emb": ["6", 0],
+      "seed": 42,
+      "seed_mode": "fixed",
+      "cfg": 6.0,
+      "steps": 8,
+      "sample_rate": 16000,
+      "context_frames": 12,
+      "context_overlap": 3,
+      "save_video": false
+    },
+    "class_type": "Echo_Sampler",
+    "_meta": { "title": "EchoMimic V3 Sampler (8 steps, Flash-Pro)" }
+  },
+  "8": {
+    "inputs": {
+      "images": ["7", 0],
+      "audio": ["3", 0],
+      "fps": ["7", 1]
+    },
+    "class_type": "CreateVideo",
+    "_meta": { "title": "Combine Frames + Audio → Video" }
+  },
+  "9": {
+    "inputs": {
+      "video": ["8", 0],
+      "filename_prefix": "video/echomimic_v3_news",
+      "format": "auto",
+      "quality": "auto"
+    },
+    "class_type": "SaveVideo",
+    "_meta": { "title": "Save Video (MP4)" }
+  }
+}

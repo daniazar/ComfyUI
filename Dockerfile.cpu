@@ -1,0 +1,44 @@
+FROM python:3.11-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y \
+    git \
+    wget \
+    ffmpeg \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy ComfyUI code
+COPY . .
+
+# Install PyTorch CPU
+RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+# Install requirements
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir sqlalchemy aiohttp tqdm requests pillow scipy numpy
+
+# Install Custom Nodes
+WORKDIR /app/custom_nodes
+
+RUN git clone https://github.com/ltdrdata/ComfyUI-Manager.git
+
+RUN git clone -b comfyui https://github.com/MeiGen-AI/InfiniteTalk.git ComfyUI-InfiniteTalk && \
+    cd ComfyUI-InfiniteTalk && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Reset workdir to app
+WORKDIR /app
+
+# Optional: You can copy your patches or workflows over the default here
+# COPY custom/comfyui_patches /app/custom_nodes/
+# COPY custom/comfy_workflows /app/user/default/workflows/
+
+EXPOSE 8188
+
+CMD ["python", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--cpu"]
