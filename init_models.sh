@@ -45,20 +45,20 @@ python download_models.py
 
 if [ ! -f "/app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/rife47.pth" ]; then
     echo "Downloading rife47.pth..."
-    wget -nc https://github.com/hzwer/Practical-RIFE/releases/download/v4.7/rife47.pth -P /app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/
+    wget -nc https://github.com/hzwer/Practical-RIFE/releases/download/v4.7/rife47.pth -P /app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/ || true
 fi
 
 echo "Ensuring placeholder input files exist..."
 mkdir -p /app/input
 if [ ! -f "/app/input/avatar.png" ]; then
-    wget -nc https://raw.githubusercontent.com/comfyanonymous/ComfyUI/master/input/example.png -O /app/input/avatar.png
+    wget -nc https://raw.githubusercontent.com/comfyanonymous/ComfyUI/master/input/example.png -O /app/input/avatar.png || true
 fi
 if [ ! -f "/app/input/avatar2.png" ]; then
-    wget -nc https://raw.githubusercontent.com/comfyanonymous/ComfyUI/master/input/example.png -O /app/input/avatar2.png
+    wget -nc https://raw.githubusercontent.com/comfyanonymous/ComfyUI/master/input/example.png -O /app/input/avatar2.png || true
 fi
 if [ ! -f "/app/input/voice.wav" ]; then
     # Download a small public domain audio sample as placeholder
-    wget -nc https://actions.google.com/sounds/v1/alarms/beep_short.ogg -O /app/input/voice.wav
+    wget -nc https://actions.google.com/sounds/v1/alarms/beep_short.ogg -O /app/input/voice.wav || true
 fi
 
 echo "All models and inputs initialized. Starting ComfyUI..."
