@@ -4,9 +4,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y \
-    python3.11 \
+    python3.10 \
     python3-pip \
-    python3.11-venv \
+    python3.10-venv \
     git \
     wget \
     ffmpeg \
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Symlink python3 to python
-RUN ln -s /usr/bin/python3.11 /usr/bin/python
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 WORKDIR /app
 
