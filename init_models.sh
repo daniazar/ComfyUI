@@ -30,7 +30,7 @@ def dl_snap(repo, pattern, ldir):
     snapshot_download(repo_id=repo, allow_patterns=pattern, local_dir=ldir, local_dir_use_symlinks=False)
 
 dl_file("Kijai/WanVideo_comfy", "Wan2_1_VAE_bf16.safetensors", "/app/models/vae")
-dl_file("Comfy-Org/Wan_2.1_ComfyUI_pretrained", "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "/app/models/clip")
+dl_file("Comfy-Org/Wan_2.1_ComfyUI_repackaged", "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "/app/models/clip")
 dl_file("comfyanonymous/clip_vision_g", "clip_vision_h.safetensors", "/app/models/clip_vision")
 
 dl_snap("BadToBest/EchoMimicV3", ["echomimicv3-flash-pro/*"], "/app/models/echo_mimic")
