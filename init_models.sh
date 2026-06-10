@@ -11,13 +11,21 @@ mkdir -p /app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/
 echo "Downloading required models (this will be skipped if they already exist)..."
 
 cat << 'EOF' > download_models.py
+import os
 from huggingface_hub import hf_hub_download, snapshot_download
 
 def dl_file(repo, fname, ldir):
+    if os.path.exists(os.path.join(ldir, fname)):
+        print(f"Skipping {fname}, already exists in {ldir}")
+        return
     print(f"Downloading {fname} from {repo}")
     hf_hub_download(repo_id=repo, filename=fname, local_dir=ldir, local_dir_use_symlinks=False)
 
 def dl_snap(repo, pattern, ldir):
+    # Quick check if folder isn't empty (simplified check since pattern downloading is complex)
+    if os.path.exists(ldir) and len(os.listdir(ldir)) > 0:
+        print(f"Skipping {pattern}, {ldir} is not empty")
+        return
     print(f"Downloading {pattern} from {repo}")
     snapshot_download(repo_id=repo, allow_patterns=pattern, local_dir=ldir, local_dir_use_symlinks=False)
 
