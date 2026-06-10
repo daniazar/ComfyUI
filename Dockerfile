@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://
 
 # Install requirements
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir sqlalchemy aiohttp tqdm requests pillow scipy numpy huggingface_hub GitPython gguf mediapipe==0.10.14
+RUN pip install --no-cache-dir sqlalchemy aiohttp tqdm requests pillow scipy numpy huggingface_hub GitPython gguf mediapipe==0.10.14 accelerate
 
 # Install Custom Nodes
 WORKDIR /app/custom_nodes
