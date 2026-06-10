@@ -1,0 +1,267 @@
+{
+  "1": {
+    "inputs": {
+      "vae": "Wan2_1_VAE_bf16.safetensors",
+      "lora": "None",
+      "denoising": true,
+      "infer_mode": "audio_drived",
+      "lowvram": false,
+      "teacache_offload": true,
+      "block_offload": true,
+      "use_mmgp": "None",
+      "version": "V3_flash"
+    },
+    "class_type": "Echo_LoadModel",
+    "_meta": {
+      "title": "Echo_LoadModel"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": "avatar.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "3": {
+    "inputs": {
+      "audio": "voice.wav",
+      "audioUI": "/api/view?filename=voice.wav&type=input&subfolder=&rand=0.9518431039511684"
+    },
+    "class_type": "LoadAudio",
+    "_meta": {
+      "title": "Load Audio"
+    }
+  },
+  "4": {
+    "inputs": {
+      "clip_name": "clip_vision_h.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "5": {
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "6": {
+    "inputs": {
+      "prompt": "a professional news anchor talking to camera, realistic, upper body visible, natural studio lighting, clear face, direct eye contact, sharp details. Arms resting down at sides, hands kept low, hands away from camera, no hands passing through table, no clipping objects.",
+      "negative_prompt": "Gesture is bad. Gesture is unclear. Strange and twisted hands. Bad hands. Bad fingers. Unclear and blurry hands. Hands passing through table, arms passing through objects, hands overlapping table, arms clipping. 手部快速摆动, 手指频繁抽搐, 夸张手势, 重复机械性动作.",
+      "pose_dir": "pose_01",
+      "width": 512,
+      "height": 768,
+      "fps": 25,
+      "facemask_ratio": 0.1,
+      "facecrop_ratio": 0.8,
+      "length": 0,
+      "partial_video_length": 65,
+      "overlap_video_length": 8,
+      "draw_mouse": false,
+      "motion_sync_": false,
+      "multi_camera_shots": true,
+      "info": [
+        "1",
+        1
+      ],
+      "image": [
+        "11",
+        0
+      ],
+      "audio": [
+        "3",
+        0
+      ],
+      "clip": [
+        "5",
+        0
+      ],
+      "clip_vision": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "Echo_Predata",
+    "_meta": {
+      "title": "Echo_Predata"
+    }
+  },
+  "7": {
+    "inputs": {
+      "seed": 42,
+      "cfg": 1.2,
+      "steps": 14,
+      "sample_rate": 16000,
+      "context_frames": 12,
+      "context_overlap": 3,
+      "save_video": false,
+      "save_parts": false,
+      "model": [
+        "1",
+        0
+      ],
+      "emb": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "Echo_Sampler",
+    "_meta": {
+      "title": "Echo_Sampler"
+    }
+  },
+  "8": {
+    "inputs": {
+      "frame_rate": 25,
+      "loop_count": 0,
+      "filename_prefix": "echomimic_v3_news",
+      "format": "video/h264-mp4",
+      "save_output": "yuv420p",
+      "images": [
+        "7",
+        0
+      ],
+      "audio": [
+        "3",
+        0
+      ],
+      "fps": [
+        "7",
+        1
+      ]
+    },
+    "class_type": "Echo_VideoCombine",
+    "_meta": {
+      "title": "Echo_VideoCombine (No PingPong)"
+    }
+  },
+  "11": {
+    "inputs": {
+      "resize_type": "scale dimensions",
+      "resize_type.width": 512,
+      "resize_type.height": 768,
+      "resize_type.crop": "center",
+      "scale_method": "area",
+      "input": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "ResizeImageMaskNode",
+    "_meta": {
+      "title": "Resize Image/Mask"
+    }
+  },
+  "12": {
+    "inputs": {
+      "image": "avatar2.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "13": {
+    "inputs": {
+      "image1": [
+        "2",
+        0
+      ],
+      "image2": [
+        "12",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "Batch Images (DEPRECATED)"
+    }
+  },
+  "14": {
+    "inputs": {
+      "ckpt_name": "rife47.pth",
+      "clear_cache_after_n_frames": 10,
+      "multiplier": 2,
+      "fast_mode": true,
+      "ensemble": true,
+      "scale_factor": 1,
+      "frames": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "RIFE VFI",
+    "_meta": {
+      "title": "RIFE VFI (recommend rife47 and rife49)"
+    }
+  },
+  "15": {
+    "inputs": {
+      "frame_rate": 50,
+      "loop_count": 0,
+      "filename_prefix": "echomimic_v3_interpolated",
+      "format": "video/h264-mp4",
+      "save_output": "yuv420p",
+      "images": [
+        "14",
+        0
+      ],
+      "audio": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "Echo_VideoCombine",
+    "_meta": {
+      "title": "Echo_VideoCombine (No PingPong)"
+    }
+  },
+  "16": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "width": 1024,
+      "height": 1980,
+      "crop": "center",
+      "image": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "ImageScale",
+    "_meta": {
+      "title": "Upscale Image"
+    }
+  },
+  "17": {
+    "inputs": {
+      "frame_rate": 50,
+      "loop_count": 0,
+      "filename_prefix": "echomimic_v3_superres",
+      "format": "video/h264-mp4",
+      "save_output": "yuv420p",
+      "images": [
+        "16",
+        0
+      ],
+      "audio": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "Echo_VideoCombine",
+    "_meta": {
+      "title": "Echo_VideoCombine (No PingPong)"
+    }
+  }
+}
