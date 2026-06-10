@@ -10,13 +10,27 @@ mkdir -p /app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/
 
 echo "Downloading required models (this will be skipped if they already exist)..."
 
-hf download Kijai/Wan2.1-VAE-safetensors Wan2_1_VAE_bf16.safetensors --local-dir /app/models/vae
-hf download Comfy-Org/Wan_2.1_ComfyUI_pretrained umt5_xxl_fp8_e4m3fn_scaled.safetensors --local-dir /app/models/clip
-hf download comfyanonymous/clip_vision_g clip_vision_h.safetensors --local-dir /app/models/clip_vision
+cat << 'EOF' > download_models.py
+from huggingface_hub import hf_hub_download, snapshot_download
 
-hf download BadToBest/EchoMimicV3 --include "echomimicv3-flash-pro/*" --local-dir /app/models/echo_mimic
-hf download BadToBest/EchoMimicV3 --include "chinese-wav2vec2-base/*" --local-dir /app/models/echo_mimic
-hf download BadToBest/EchoMimicV3 --include "transformer/*" --local-dir /app/models/echo_mimic
+def dl_file(repo, fname, ldir):
+    print(f"Downloading {fname} from {repo}")
+    hf_hub_download(repo_id=repo, filename=fname, local_dir=ldir, local_dir_use_symlinks=False)
+
+def dl_snap(repo, pattern, ldir):
+    print(f"Downloading {pattern} from {repo}")
+    snapshot_download(repo_id=repo, allow_patterns=pattern, local_dir=ldir, local_dir_use_symlinks=False)
+
+dl_file("Kijai/Wan2.1-VAE-safetensors", "Wan2_1_VAE_bf16.safetensors", "/app/models/vae")
+dl_file("Comfy-Org/Wan_2.1_ComfyUI_pretrained", "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "/app/models/clip")
+dl_file("comfyanonymous/clip_vision_g", "clip_vision_h.safetensors", "/app/models/clip_vision")
+
+dl_snap("BadToBest/EchoMimicV3", ["echomimicv3-flash-pro/*"], "/app/models/echo_mimic")
+dl_snap("BadToBest/EchoMimicV3", ["chinese-wav2vec2-base/*"], "/app/models/echo_mimic")
+dl_snap("BadToBest/EchoMimicV3", ["transformer/*"], "/app/models/echo_mimic")
+EOF
+
+python download_models.py
 
 if [ ! -f "/app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/rife47.pth" ]; then
     echo "Downloading rife47.pth..."
