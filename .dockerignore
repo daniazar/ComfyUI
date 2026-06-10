@@ -1,0 +1,7 @@
+venv/
+models/
+output/
+user/
+custom_nodes/
+.git
+__pycache__/

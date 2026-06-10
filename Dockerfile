@@ -20,8 +20,8 @@ RUN ln -s /usr/bin/python3.11 /usr/bin/python
 
 WORKDIR /app
 
-# Copy ComfyUI code
-COPY . .
+# Copy only requirements first to cache the pip installations
+COPY requirements.txt .
 
 # Install PyTorch
 RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
@@ -66,6 +66,9 @@ COPY custom/comfy_workflows/echomimic_v3_flash_ui.json /app/user/default/workflo
 # Copy initialization script
 COPY init_models.sh /app/init_models.sh
 RUN chmod +x /app/init_models.sh
+
+# Finally, copy the rest of ComfyUI code (changes most frequently)
+COPY . .
 
 EXPOSE 8188
 

@@ -10,13 +10,13 @@ mkdir -p /app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/
 
 echo "Downloading required models (this will be skipped if they already exist)..."
 
-huggingface-cli download Kijai/Wan2.1-VAE-safetensors Wan2_1_VAE_bf16.safetensors --local-dir /app/models/vae
-huggingface-cli download Comfy-Org/Wan_2.1_ComfyUI_pretrained umt5_xxl_fp8_e4m3fn_scaled.safetensors --local-dir /app/models/clip
-huggingface-cli download comfyanonymous/clip_vision_g clip_vision_h.safetensors --local-dir /app/models/clip_vision
+hf download Kijai/Wan2.1-VAE-safetensors Wan2_1_VAE_bf16.safetensors --local-dir /app/models/vae
+hf download Comfy-Org/Wan_2.1_ComfyUI_pretrained umt5_xxl_fp8_e4m3fn_scaled.safetensors --local-dir /app/models/clip
+hf download comfyanonymous/clip_vision_g clip_vision_h.safetensors --local-dir /app/models/clip_vision
 
-huggingface-cli download BadToBest/EchoMimicV3 --include "echomimicv3-flash-pro/*" --local-dir /app/models/echo_mimic
-huggingface-cli download BadToBest/EchoMimicV3 --include "chinese-wav2vec2-base/*" --local-dir /app/models/echo_mimic
-huggingface-cli download BadToBest/EchoMimicV3 --include "transformer/*" --local-dir /app/models/echo_mimic
+hf download BadToBest/EchoMimicV3 --include "echomimicv3-flash-pro/*" --local-dir /app/models/echo_mimic
+hf download BadToBest/EchoMimicV3 --include "chinese-wav2vec2-base/*" --local-dir /app/models/echo_mimic
+hf download BadToBest/EchoMimicV3 --include "transformer/*" --local-dir /app/models/echo_mimic
 
 if [ ! -f "/app/custom_nodes/comfyui-frame-interpolation/ckpts/rife/rife47.pth" ]; then
     echo "Downloading rife47.pth..."
