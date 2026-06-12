@@ -204,6 +204,11 @@ def load_v3_flash(sampler_name,vae_path,inp_vae,weigths_current_path,config_path
             state_dict = torch.load(os.path.join(transformer_path, f'checkpoint-{ckpt_idx}.pth'))
         state_dict = state_dict["state_dict"] if "state_dict" in state_dict else state_dict
 
+        if 'patch_embedding.weight' in state_dict and transformer.state_dict()['patch_embedding.weight'].size() != state_dict['patch_embedding.weight'].size():
+            transformer.state_dict()['patch_embedding.weight'][:, :state_dict['patch_embedding.weight'].size()[1], :, :] = state_dict['patch_embedding.weight']
+            transformer.state_dict()['patch_embedding.weight'][:, state_dict['patch_embedding.weight'].size()[1]:, :, :] = 0
+            state_dict['patch_embedding.weight'] = transformer.state_dict()['patch_embedding.weight']
+
         m, u = transformer.load_state_dict(state_dict, strict=False)
         del state_dict
         gc.collect()
