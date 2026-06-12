@@ -57,7 +57,7 @@
   },
   "6": {
     "inputs": {
-      "prompt": "a professional news anchor talking to camera, realistic, upper body visible, natural studio lighting, clear face, direct eye contact, sharp details. Arms resting down at sides, hands kept low, hands away from camera, no hands passing through table, no clipping objects.",
+      "prompt": "",
       "negative_prompt": "Gesture is bad. Gesture is unclear. Strange and twisted hands. Bad hands. Bad fingers. Unclear and blurry hands. Hands passing through table, arms passing through objects, hands overlapping table, arms clipping. 手部快速摆动, 手指频繁抽搐, 夸张手势, 重复机械性动作.",
       "pose_dir": "pose_01",
       "width": 512,
@@ -67,7 +67,7 @@
       "facecrop_ratio": 0.8,
       "length": 0,
       "partial_video_length": 65,
-      "overlap_video_length": 8,
+      "overlap_video_length": 16,
       "draw_mouse": false,
       "motion_sync_": false,
       "multi_camera_shots": true,

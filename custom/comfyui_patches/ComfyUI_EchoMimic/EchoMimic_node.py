@@ -185,8 +185,15 @@ class Echo_Predata:
         else:
             face_img = nomarl_upscale(image, width, height)
             
-        if not multi_camera_shots and isinstance(face_img, list):
-            face_img = face_img[0]
+        if isinstance(face_img, list):
+            # Check if all images in the batch are identical
+            if len(face_img) > 1:
+                first_img_arr = np.array(face_img[0])
+                if all(np.array_equal(first_img_arr, np.array(img)) for img in face_img[1:]):
+                    multi_camera_shots = False
+            
+            if not multi_camera_shots:
+                face_img = face_img[0]
 
         #pre audio
         audio_file_prefix = ''.join(random.choice("0123456789") for _ in range(6))
